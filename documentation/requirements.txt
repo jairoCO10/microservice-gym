@@ -1,0 +1,4 @@
+mkdocs
+mkdocs-terminal
+mkdocs-material
+mkdocs-simple-blog

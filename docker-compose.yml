@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  docs:
+    container_name: doc-gym
+    build:
+      context: ./documentation
+      dockerfile: Dockerfile
+    ports:
+      - "8050:8050"
+    volumes:
+      - ./docs:/code/docs
+
+  users:
+    container_name: api-users
+    build:
+      context: ./backend/apps/users
+      dockerfile: Dockerfile
+    ports:
+      - "8060:8060"
+    volumes:
+      - ./backend/apps/users:/app
+    networks:
+      - gym-network
+
+  auth:
+    container_name: auth
+    build:
+      context: ./backend/apps/auth
+      dockerfile: Dockerfile
+    ports:
+      - "8061:8061"
+    volumes:
+      - ./backend/apps/auth:/auth
+    networks:
+      - gym-network  # Añadir la red aquí
+  
+  diet:
+    container_name: diet
+    build:
+      context: ./backend/apps/diet
+      dockerfile: Dockerfile
+    ports:
+      - "8062:8062"
+    volumes:
+      - ./backend/apps/diet:/auth
+    networks:
+      - gym-network  # Añadir la red aquí
+
+
+
+networks:
+  gym-network:
+    driver: bridge
+
+
+
+
+  # routines:
+  #   build:
+  #     context: ./apps/routines
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8004:8000"
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - DATABASE_URL=postgresql://user:password@db:5432/gym_db
+  #   volumes:
+  #     - ./apps/routines:/app
+  #   networks:
+  #     - gym-network
+
+  # notifications:
+  #   build:
+  #     context: ./apps/notifications
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8005:8000"
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - DATABASE_URL=postgresql://user:password@db:5432/gym_db
+  #   volumes:
+  #     - ./apps/notifications:/app
+  #   networks:
+  #     - gym-network
+
+  # db:
+  #   image: postgres:13
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: gym_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
+  #   networks:
+  #     - gym-network
+
+    
+
+# volumes:
+#   db-data:
